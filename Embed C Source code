@@ -1,0 +1,157 @@
+constint pingPin1 = 3; // Trigger Pin of Ultrasonic Sensor
+constint echoPin1 = 2; // Echo Pin of Ultrasonic Sensor
+constint pingPin2 = 5; // Trigger Pin of Ultrasonic Sensor
+constint echoPin2 = 4; // Echo Pin of Ultrasonic Sensor
+constint pingPin3 = 7; // Trigger Pin of Ultrasonic Sensor
+constint echoPin3 = 6; // Echo Pin of Ultrasonic Sensor
+constint vib1 = 9; // vib and soundpin are not changed throughout     the process
+constint vib2 = 10; // vib and soundpin are not changed throughout the process
+constint vib3 = 11; // vib and soundpin are not changed throughout the process
+constintsoundpin = A2;
+//constintthershu=22400; // sets threshold value for Ultrasonic sensor
+//constintthershss=1050; // sets threshold value for sound sensor
+
+void setup() {
+Serial.begin(9600);
+pinMode(soundpin, INPUT);
+pinMode(vib1, OUTPUT);
+pinMode(vib2, OUTPUT);
+pinMode(vib3, OUTPUT);
+
+  // Starting Serial Terminal
+}
+
+void loop() {
+long duration1, duration2, duration3, inches, cm, tempu, threshu = 22400;
+intthreshss = 1050;
+pinMode(pingPin1, OUTPUT);
+digitalWrite(pingPin1, LOW);
+delayMicroseconds(2);
+digitalWrite(pingPin1, HIGH);
+delayMicroseconds(10);
+digitalWrite(pingPin1, LOW);
+pinMode(echoPin1, INPUT);
+  duration1 = pulseIn(echoPin1, HIGH);
+inches = microsecondsToInches(duration1);
+  cm = microsecondsToCentimeters(duration1);
+Serial.println(duration1);
+Serial.print(inches);
+Serial.print("for sensor 1 in, ");
+Serial.print(cm);
+Serial.print("cm");
+Serial.println();
+delay(1000);
+pinMode(pingPin2, OUTPUT);
+digitalWrite(pingPin2, LOW);
+delayMicroseconds(2);
+digitalWrite(pingPin2, HIGH);
+delayMicroseconds(10);
+digitalWrite(pingPin2, LOW);
+pinMode(echoPin2, INPUT);
+  duration2 = pulseIn(echoPin2, HIGH);
+inches = microsecondsToInches(duration2);
+  cm = microsecondsToCentimeters(duration2);
+Serial.print(inches);
+Serial.print("for sensor 2 in, ");
+Serial.print(cm);
+Serial.print("cm");
+Serial.println();
+delay(1000);
+pinMode(pingPin3, OUTPUT);
+digitalWrite(pingPin3, LOW);
+delayMicroseconds(2);
+digitalWrite(pingPin3, HIGH);
+delayMicroseconds(10);
+digitalWrite(pingPin3, LOW);
+pinMode(echoPin3, INPUT);
+  duration3 = pulseIn(echoPin3, HIGH);
+inches = microsecondsToInches(duration3);
+  cm = microsecondsToCentimeters(duration3);
+Serial.print(inches);
+Serial.print("for sensor 3 in, ");
+Serial.print(cm);
+Serial.print("cm");
+Serial.println();
+delay(1000);
+
+intsoundsens = analogRead(soundpin);
+Serial.println(soundsens);
+
+if (duration1 < duration2 && duration1 < duration3)
+tempu = duration1;
+else if (duration2 < duration1 && duration2 < duration3)
+tempu = duration2;
+else if (duration3 < duration1 && duration3 < duration2)
+tempu = duration3;
+else if ((duration1 == duration2) && (duration2 == duration3))
+tempu = duration2;
+else if ((duration1 == duration2) && (duration2 < duration3))
+tempu = duration2;
+else if ((duration1 == duration2) && (duration2 > duration3))
+tempu = duration3;
+else if ((duration1 == duration3) && (duration2 < duration3))
+tempu = duration2;
+else if ((duration1 == duration3) && (duration2 > duration3))
+tempu = duration3;
+
+if ((tempu<threshu) && (soundsens>threshss)) {
+if (tempu == duration1) {
+digitalWrite(vib1, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib1, LOW); //turns led on
+    } else if (tempu == duration2) {
+digitalWrite(vib2, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib2, LOW); //turns led on
+
+    } else {
+digitalWrite(vib3, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib3, LOW); //turns led on
+    }
+  } else if ((tempu<threshu) && (soundsens<threshss)) {
+if (tempu == duration1) {
+digitalWrite(vib1, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib1, LOW); //turns led on
+    } else if (tempu == duration2) {
+digitalWrite(vib2, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib2, LOW); //turns led on
+
+    } else {
+digitalWrite(vib3, HIGH); //turns led on
+delay(1000);
+digitalWrite(vib3, LOW); //turns led on
+    }
+  } else if ((tempu>threshu) && (soundsens<threshss)) {
+
+if (tempu == duration1) {
+digitalWrite(vib1, LOW); //turns led on
+delay(1000);
+    } else if (tempu == duration2) {
+digitalWrite(vib2, LOW); //turns led on
+delay(1000);
+    } else {
+digitalWrite(vib3, LOW); //turns led on
+delay(1000);
+    }
+  } else if ((tempu>threshu) && (soundsens>threshss)) {
+if (tempu == duration1) {
+digitalWrite(vib1, LOW); //turns led on
+delay(1000);
+    } else if (tempu == duration2) {
+digitalWrite(vib2, LOW); //turns led on
+delay(1000);
+    } else {
+digitalWrite(vib3, LOW); //turns led on
+delay(1000);
+    }
+  }
+}
+longmicrosecondsToInches(long microseconds) {
+return microseconds / 74 / 2;
+}
+Longmicr osecondsToCentimeters(long microseconds) {
+return microseconds / 29 / 2;
+}
